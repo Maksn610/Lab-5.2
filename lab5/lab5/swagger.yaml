@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Ticketing Service API
+  version: 1.0.0
+  description: API для купівлі та бронювання квитків на концерти, події і т.д.
+
+paths:
+  /tickets:
+    post:
+      summary: Купівля квитка
+      description: Купівля квитка на подію. Передайте ID події та ID користувача.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: integer
+                  description: ID події, на яку купується квиток
+                userId:
+                  type: integer
+                  description: ID користувача, який робить покупку
+      responses:
+        '200':
+          description: Успішна покупка
+        '400':
+          description: Помилка у вхідних даних або квиток вже куплений
+
+    put:
+      summary: Бронювання квитка
+      description: Бронювання квитка на подію. Передайте ID події та ID користувача.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventId:
+                  type: integer
+                  description: ID події, на яку бронюється квиток
+                userId:
+                  type: integer
+                  description: ID користувача, який робить бронювання
+      responses:
+        '200':
+          description: Успішне бронювання
+        '400':
+          description: Помилка у вхідних даних або квиток вже заброньований
+
+    delete:
+      summary: Скасування броні
+      description: Скасування броні квитка. Передайте ID події та ID користувача.
+      parameters:
+        - name: eventId
+          in: query
+          description: ID події, на яку скасовується бронь
+          required: true
+          schema:
+            type: integer
+        - name: userId
+          in: query
+          description: ID користувача, який скасовує бронь
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Бронь скасована
+        '400':
+          description: Помилка у вхідних даних або користувач не є власником броні
